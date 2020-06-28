@@ -14,10 +14,11 @@ let recorder;
 let audioContext;
 
 export default function Record(props) {
+    const result = {};
     const [handlingResponse, changeStatus] = useState(false);
     const [isRecording, switchRecording] = useState(false);
     const [dataIsReceived, switchReceive] = useState(false)
-
+    console.log(Object.keys(result).length === 0)
     const startRecord = () => {
         switchRecording(true);
         audioContext = new window.AudioContext()

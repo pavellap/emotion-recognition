@@ -3,7 +3,7 @@ import Record from "./Recorder";
 import styled from "styled-components";
 import './App.css';
 import Information from "./Information";
-
+import Footer from "./Footer";
 const Button = styled.button``
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
             </header>
             <Record/>
             <Information/>
+            <Footer/>
         </>
     );
 }
