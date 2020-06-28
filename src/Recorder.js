@@ -3,6 +3,8 @@ import Axios from "axios";
 import Loader from "./Loader";
 import Recorder from "recorder-js/src";
 import './Recorder.scss'
+import configuration from "./config";
+import Visualization from "./Visualization";
 
 /*
 * переменные вынесены наружу в связи с тем, что useState
@@ -14,12 +16,14 @@ let audioContext;
 export default function Record(props) {
     const [handlingResponse, changeStatus] = useState(false);
     const [isRecording, switchRecording] = useState(false);
+    const [dataIsReceived, switchReceive] = useState(false)
 
     const startRecord = () => {
         switchRecording(true);
         audioContext = new window.AudioContext()
         recorder = new Recorder(audioContext, {onAnalysed: data => {
-            // здесь массив значений, потом через канвас сделать визуализатор
+            // here comes an array of sound attitude, may be visualized with canvas later
+                console.log(data)
         }});
         navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
                 recorder.init(stream);
@@ -35,7 +39,6 @@ export default function Record(props) {
 
     const stopRecord = () => {
         switchRecording(false);
-
         recorder.stop().then(({blob}) => {
             const fd = new FormData();
             const filename = 'result.wav'
@@ -43,13 +46,12 @@ export default function Record(props) {
             const config = {
                 headers: { 'content-type': 'multipart/form-data' }
             }
-            console.log("Current location:", window.location.href + '/audio')
-            const path = "http://localhost:3000/audio";
             changeStatus(true);
-            Axios.post(path, fd, config
+
+            Axios.post(configuration.endpointURL, fd, config
             ).then(res => {
-                console.log(res);
-                changeStatus(false)
+                switchReceive(true);
+                changeStatus(false);
             }).catch(err => {
                 if (err)
                     console.log(err);
@@ -60,45 +62,14 @@ export default function Record(props) {
     return (
         <div className="recorder">
             <div className="button">
-                <div onClick={isRecording ? stopRecord : startRecord}>{isRecording ? "STOP" : "RECORD"}</div>
-                <h3>Emotion: happy</h3>
-                <h3>Gender: Male</h3>
+                {(!handlingResponse && !dataIsReceived) && <>
+                    <h2>Press the button to start recording your voice</h2>
+                    <div onClick={isRecording ? stopRecord : startRecord}>{isRecording ? "STOP" : "RECORD"}</div>
+                </>}
+                {handlingResponse && <Loader/>}
             </div>
-            <div className="meta">
-                <h2>We have got some features of your voice. Look at them!</h2>
-                <div className='pics-container'>
-                    <div>
-                        <div>
-                            <h4>Spectrogram</h4>
-                            <p>Visual representation of the spectrum of frequencies of a signal as it varies with time</p>
-                        </div>
-                        <img src="./chroma.png" alt="waveform"/>
-                    </div>
-                    <div>
-                        <div>
-                            <h4>Waveform</h4>
-                            <p>The shape of its graph as a function of time, independent of its time
-                                and magnitude scales and of any displacement in time.</p>
-                        </div>
-                        <img src="./wave.png" alt="waveform"/>
-                    </div>
-                </div>
-            </div>
+            {dataIsReceived && <Visualization/>}
         </div>
     )
 }
 
-
-
-/*useEffect(() => {
-    //changeStatus(true)
-    console.log("Component did mount")
-    Axios.get('http://localhost:9000/test').then((res) => {
-        setTimeout(() => {
-            console.log(res.data)
-            changeStatus(false)
-        }, 5000)
-    })
-}, [])
-
- */

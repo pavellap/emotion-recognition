@@ -41,10 +41,12 @@ app.post('/audio', upload.any(), function(req, res) {
         console.log('form data', formData, 'file' , files);
         res.send({result})
     }))*/
-    res.send({
-        result: "Success"
-    })
-    //res.sendStatus(200);
+    setTimeout(() => {
+        res.send({
+            result: "Success",
+        })
+    }, 4000)
+
 });
 
 app.listen(PORT, () => {

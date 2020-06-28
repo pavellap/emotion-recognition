@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Record from "./Recorder";
 import styled from "styled-components";
 import './App.css';
+import Information from "./Information";
 
 const Button = styled.button``
 
@@ -13,6 +14,7 @@ function App() {
                 <p>Application, built on neural network, will recognize your emotion</p>
             </header>
             <Record/>
+            <Information/>
         </>
     );
 }
