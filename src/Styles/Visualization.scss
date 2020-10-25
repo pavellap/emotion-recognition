@@ -1,11 +1,11 @@
-.meta h2 {
-  text-align: center;
-  margin-bottom: 50px;
-}
 .meta {
-  background: #EDEEF0;
+  padding-top: 30px;
+  h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-weight: normal;
+  }
 }
-
 .pics-container {
   width: 100%;
   display: flex;

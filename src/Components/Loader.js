@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from "styled-components";
-import './Loader.scss'
+import '../Styles/Loader.scss'
 
 
 const Container = styled.div`

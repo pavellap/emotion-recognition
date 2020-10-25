@@ -1,5 +1,7 @@
 import React from 'react'
-import './Information.scss'
+import '../Styles/Information.scss'
+import {Stepper, Step, StepLabel} from "@material-ui/core";
+
 
 export default function() {
     return (
@@ -17,7 +19,21 @@ export default function() {
                         where we transform it to wav-format and 'feed' to out neural network.</p>
                 </div>
             </div>
-            <div className='steps-container'>
+            <div className='stepper-container'>
+                <Stepper alternativeLabel activeStep={2}>
+                    {['Recording your voice', 'Sending binary stream to server',
+                    'Neural network detects emotion', 'Responding back, you get your request'].map((label) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+            </div>
+        </section>
+    )
+}
+/*
+<div className='steps-container'>
                 <div className="steps-item">
                     <div>
                         <div className="steps-circle"/>
@@ -59,6 +75,4 @@ export default function() {
                     </div>
                 </div>
             </div>
-        </section>
-    )
-}
+ */

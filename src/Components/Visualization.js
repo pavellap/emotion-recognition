@@ -1,5 +1,5 @@
 import React from 'react'
-import './Visualization.scss'
+import '../Styles/Visualization.scss'
 
 export default function Visualization() {
     return (
