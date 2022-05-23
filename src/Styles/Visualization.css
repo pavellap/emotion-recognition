@@ -1,0 +1,33 @@
+.meta {
+  padding-top: 30px;
+}
+
+.meta h2 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-weight: normal;
+}
+
+.pics-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.pics-container p {
+  width: 100%;
+  justify-content: center;
+  word-wrap: break-word;
+  flex-wrap: wrap
+}
+
+.pics-container  div {
+  width: 270px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 45px;
+  word-wrap: break-word;
+  align-items: center;
+}

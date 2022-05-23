@@ -1,0 +1,11 @@
+.float__right {
+    text-align: right;
+}
+
+.float__left {
+    text-align: left;
+}
+
+.text__big {
+    font-size: 21px !important;
+}

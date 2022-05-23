@@ -1,5 +1,5 @@
 import React from 'react'
-import '../Styles/Information.scss'
+import '../Styles/Information.css'
 import {Stepper, Step, StepLabel} from "@material-ui/core";
 
 

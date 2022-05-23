@@ -1,0 +1,36 @@
+.container {
+    padding-bottom: 150px;
+}
+
+.button__short {
+    width: 100%;
+    background-color: #a85d5c;
+    max-width: 100%;
+    margin: 0 auto;
+    cursor: pointer;
+    text-decoration: none !important;
+    text-transform: none;
+}
+
+.button_container {
+    width: 350px;
+    margin: 50px auto;
+}
+
+.card-picture {
+    height: 100px;
+    width: 100%;
+}
+
+.home-page_title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: normal;
+    width: 100%;
+    text-transform: uppercase;
+    margin: 50px 0;
+}
+
+.card-spacing {
+    margin: 35px 0;
+}

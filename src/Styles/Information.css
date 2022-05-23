@@ -1,12 +1,13 @@
 .info-container {
   margin: 0 auto;
   width: 80%;
-  h3 {
-    font-size: 26px;
-    padding-bottom: 15px;
-    padding-top: 15px;
-    font-weight: normal;
-  }
+}
+
+.info-container  h3 {
+  font-size: 26px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  font-weight: normal;
 }
 
 .stepper-container {
@@ -18,12 +19,13 @@
   height: 100px;
   width: 25%;
   position: relative;
-  > div {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    width: 100%;
-  }
+}
+
+.steps-item > div {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
 }
 
 .steps-circle {
@@ -53,21 +55,24 @@
   flex-direction: column;
   color: gray;
   padding-top: 10px;
-  span {
-    margin-top: 7px;
-  }
+}
+
+.steps-item-info-container span {
+  margin-top: 7px;
 }
 
 .info-container-description {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  > div * {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
-  div {
-    width: 40%;
-  }
+}
+
+.info-container-description > div * {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.info-container-description  div {
+  width: 40%;
 }

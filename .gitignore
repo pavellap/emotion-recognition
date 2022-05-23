@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/server/node_modules
+/server/network/env
 /.pnp
 .pnp.js
 
@@ -17,7 +19,8 @@
 
 #service
 
-/audios
+/server/audios
+/server/network/env
 
 # misc
 .DS_Store
