@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import './Recorder.css'
 import {Emotions, Genders} from "../types";
 
-
+// todo: move to utils
 const wait = (ms: number) => new Promise<void>((res) => setTimeout(() => res(), ms));
 
 // todo: refactor Button
@@ -49,7 +49,7 @@ const RECORD_BASE_INTERVAL = 3 * 1000;
 let instantRecorder: Recorder;
 
 
-export default function Record() {
+const Record: React.FC = () => {
     const [isFetching, setFetching] = React.useState<boolean>(false);
     const [isRecording, setRecording] = React.useState<boolean>(false);
     const [isFetched, setFetched] = React.useState<boolean>(false);
@@ -174,3 +174,4 @@ export default function Record() {
     )
 }
 
+export default React.memo(Record);
