@@ -64,9 +64,10 @@ def add_silence(snd, seconds):
 
 
 if __name__ == "__main__":
-
+    # todo: добавить комменты к путям обработки
     absPath = os.path.abspath(os.path.dirname(sys.argv[0]))
     filename1 = sys.argv[1]  # сюда записывать путь к тестируемой аудиозаписи в формате wav
+    # todo: поправить костыль
     filename2 = f"/Users/pavellapsin/WebstormProjects/emotion-recognition/server/network/processed.wav"
 
     modelG = pickle.load(open(absPath + "/models/mlp_classifier_gender.model", "rb"))  # открываем модель гендерной нейросети
@@ -114,7 +115,7 @@ if __name__ == "__main__":
             resultF = modelF.predict(features)[0]
             print({
                 "emotion": resultF,
-                "gender": "male",
+                "gender": "female",
                 "success": "true"
             })
     else:

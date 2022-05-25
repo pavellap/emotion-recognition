@@ -82,6 +82,8 @@ app.post('/audio', upload.any(), function (req, res) {
     console.log('script')
     cp.exec(`python3 ./network/main.py ${filename}`, ((error, stdout) => {
         try {
+            console.log('error script: ', error)
+            console.log('stdout: ', stdout)
             const parsed = JSON.parse(stdout.replaceAll('\'', '\"'));
             db.updateEmotion(hash, parsed.emotion);
             res.send({...parsed, error: false})
