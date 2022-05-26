@@ -4,6 +4,7 @@ import sys
 import pickle
 from array import array
 import struct
+import json
 
 from utils import extract_feature
 
@@ -67,11 +68,10 @@ if __name__ == "__main__":
     # todo: добавить комменты к путям обработки
     absPath = os.path.abspath(os.path.dirname(sys.argv[0]))
     filename1 = sys.argv[1]  # сюда записывать путь к тестируемой аудиозаписи в формате wav
-    # todo: поправить костыль
-    filename2 = f"/Users/pavellapsin/WebstormProjects/emotion-recognition/server/network/processed.wav"
+    filename2 = sys.argv[2]  # сюда записываем путь к обработанной аудиозаписи в формате wav
 
     modelG = pickle.load(open(absPath + "/models/mlp_classifier_gender.model", "rb"))  # открываем модель гендерной нейросети
-     # сюда записывать путь для сохранения отредактированной первой записи
+    # сюда записывать путь для сохранения отредактированной первой записи
     # лучше создать копию первой записи и переименовать в имя файла2
 
     r = array('h')  # создаем массив для сохранения данных аудиозаписи
@@ -105,21 +105,21 @@ if __name__ == "__main__":
         if resultG == "male":  # если мальчик - то открываем мужскую модель и передаем запись в нее
             modelM = pickle.load(open(absPath + "/models/mlp_classifier_male.model", "rb"))
             resultM = modelM.predict(features)[0]
-            print({
+            print(json.dumps({
                 "emotion": resultM,
                 "gender": "male",
-                "success": "true"
-            })
+                "success": True
+            }))
         elif resultG == "female":  # иначе - в женскую
             modelF = pickle.load(open(absPath + "/models/mlp_classifier_male.model", "rb"))
             resultF = modelF.predict(features)[0]
-            print({
+            print(json.dumps({
                 "emotion": resultF,
                 "gender": "female",
-                "success": "true"
-            })
+                "success": True
+            }))
     else:
-        print({
-            "success": "false",
+        print(json.dumps({
+            "success": False,
             "reason": "silence"
-        })
+        }))

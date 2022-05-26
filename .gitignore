@@ -4,6 +4,8 @@
 /node_modules
 /server/node_modules
 /server/network/env
+/server/audios
+/server/network/models
 /.pnp
 .pnp.js
 
@@ -19,8 +21,6 @@
 
 #service
 
-/server/audios
-/server/network/env
 
 # misc
 .DS_Store
