@@ -1,12 +1,13 @@
-import React, {Fragment} from "react";
+import React, {Fragment } from "react";
 import Axios from "axios";
-import {Button, Typography, withStyles} from '@material-ui/core'
+import { Button, Typography, withStyles } from '@material-ui/core'
 import Recorder from "recorder-js";
-import configuration from "../config/config";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { API_URLS} from "../config/config";
+import { Emotions, Genders } from "../types";
+
 
 import './Recorder.css'
-import {Emotions, Genders} from "../types";
 
 // todo: move to utils
 const wait = (ms: number) => new Promise<void>((res) => setTimeout(() => res(), ms));
@@ -36,11 +37,11 @@ type ApiResponseType = {
 }
 
 const INITIAL_STATE: ApiResponseType = {
-    emotion: null,
+    emotion: Emotions.angry,
     gender: null,
     success: null,
     error: null,
-    reason: null,
+    reason: null
 }
 
 /** Длина отрезка в секундах */
@@ -77,7 +78,7 @@ const Record: React.FC = () => {
             const fd = new FormData();
             fd.append("wavfile", blob, DEFAULT_UPLOAD_FILENAME);
             setFetching(true);
-            const response = await Axios.post<ApiResponseType>(configuration.endpointURL, fd, {headers: {'content-type': 'multipart/form-data'}})
+            const response = await Axios.post<ApiResponseType>(API_URLS.audio, fd, {headers: {'content-type': 'multipart/form-data'}})
             setFetched(true);
             setFetching(false);
             setData(response.data);
