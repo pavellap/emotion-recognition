@@ -14,7 +14,7 @@ function App() {
     return (
         <div className="wrapper">
             <header>
-                <h1>Распознавание эмоций по речи</h1>
+                <h1>Speech Emotion Recognition</h1>
                 <p>Приложение, созданное с помощью нейронной сети, распознает ваши эмоции</p>
             </header>
             <Router>
@@ -22,12 +22,12 @@ function App() {
                     <Route exact path='/record'>
                         <Record />
                     </Route>
-                    <Route exact path='/'>
-                        <HomePage />
-                    </Route>
-                    <Route exact path='/info'>
-                        <Info/>
-                    </Route>
+                    {/*<Route exact path='/'>*/}
+                    {/*    <HomePage />*/}
+                    {/*</Route>*/}
+                    {/*<Route exact path='/info'>*/}
+                    {/*    <Info/>*/}
+                    {/*</Route>*/}
                 </Switch>
             </Router>
         </div>

@@ -1,12 +1,12 @@
-import React, {Fragment } from "react";
+import React, {Fragment, useState} from "react";
 import Axios from "axios";
-import { Button, Typography, withStyles } from '@material-ui/core'
+import {Button, Typography, withStyles} from '@material-ui/core'
 import Recorder from "recorder-js";
-import { Link } from 'react-router-dom';
-import { API_URLS} from "../config/config";
-import { Emotions, Genders } from "../types";
-
-
+import {Link} from 'react-router-dom';
+import {API_URLS} from "../config/config";
+import {Emotions, Genders} from "../types";
+import Recognise from '../Assets/Recognise'
+import Play from '../Assets/Play'
 import './Recorder.css'
 
 // todo: move to utils
@@ -15,16 +15,56 @@ const wait = (ms: number) => new Promise<void>((res) => setTimeout(() => res(), 
 // todo: refactor Button
 const ColorButton = withStyles(() => ({
     root: {
-        backgroundColor: "#a85d5c",
-        color: '#fff',
-        height: 56,
+        backgroundColor: "#130E12",
+        color: '#E4E1E6',
+        height: 65,
+        width: 200,
+        border: '2px solid',
+        borderRadius: 35,
+        borderColor: '#43E090',
         fontSize: 16,
+        fontWeight: 600,
         "&:hover": {
-            backgroundColor: "#a85d5c",
-            color: '#fff'
+            backgroundColor: '#43E090',
+            color: "#130E12"
         }
     },
 }))(Button);
+
+const ColorTextHeader = withStyles(() => ({
+    root: {
+        color: '#E4E1E6',
+        fontSize: 32,
+        fontWeight: 500,
+        alignSelf: 'center',
+    },
+}))(Typography);
+
+const ColorText = withStyles(() => ({
+    root: {
+        color: '#E4E1E6',
+        opacity: .7,
+        fontFamily: 'monospace',
+        fontSize: 22,
+        fontWeight: 500,
+        textTransform: 'capitalize',
+        "&:hover": {
+            color: "#FFF",
+            opacity: 1,
+        }
+    },
+}))(Typography);
+
+const ColorTextSample = withStyles(() => ({
+    root: {
+        color: '#E4E1E6',
+        opacity: .7,
+        fontFamily: 'monospace',
+        fontSize: 22,
+        fontWeight: 500,
+        textTransform: 'capitalize',
+    },
+}))(Typography);
 
 const DEFAULT_UPLOAD_FILENAME = 'audio.wav'
 
@@ -37,11 +77,18 @@ type ApiResponseType = {
 }
 
 const INITIAL_STATE: ApiResponseType = {
-    emotion: Emotions.angry,
+    emotion: null,
     gender: null,
     success: null,
     error: null,
     reason: null
+}
+
+const colorWaveMapper = {
+    'angry': '#FF5C5C',
+    'happy': '#FDDD48',
+    'neutral': '#FFF',
+    'sad': '#5B8DEF',
 }
 
 /** Длина отрезка в секундах */
@@ -56,6 +103,7 @@ const Record: React.FC = () => {
     const [isFetched, setFetched] = React.useState<boolean>(false);
     const [data, setData] = React.useState<ApiResponseType>(INITIAL_STATE);
     const [interval, setIntervalInstance] = React.useState<NodeJS.Timer>();
+    const [colorWave, setColorWave] = useState('#FFF')
 
 
     const startRecord = React.useCallback(async (recorder: Recorder) => {
@@ -66,8 +114,7 @@ const Record: React.FC = () => {
             }
             setRecording(true);
             await recorder.start();
-        }
-        catch (e) {
+        } catch (e) {
             console.log('caught error on start record: ', e);
         }
     }, [])
@@ -82,8 +129,8 @@ const Record: React.FC = () => {
             setFetched(true);
             setFetching(false);
             setData(response.data);
-        }
-        catch (e) {
+            response.data.emotion && setColorWave(colorWaveMapper[response.data.emotion])
+        } catch (e) {
             console.log('error during upload occurred: ', e);
         }
     }, [])
@@ -97,13 +144,12 @@ const Record: React.FC = () => {
             setRecording(false);
             const {blob} = await recorder.stop();
             return blob;
-        }
-        catch (e) {
+        } catch (e) {
             console.log('caught error on record stop: ', e);
         }
     }, [])
 
-    const handleRecordClick = React.useCallback(async() => {
+    const handleRecordClick = React.useCallback(async () => {
         if (isFetching) {
             return;
         }
@@ -122,8 +168,7 @@ const Record: React.FC = () => {
         if (isRecording) {
             console.log('clearing');
             clearInterval(interval)
-        }
-        else {
+        } else {
             startIntervalRecord();
         }
     }, [isRecording, interval])
@@ -141,36 +186,57 @@ const Record: React.FC = () => {
     }, [])
 
     return (
-        <div className="recorder">
+        <div>
             <div className="container">
-                <h2 className="title">Нажмите кнопку для того, чтобы начать запись голоса</h2>
-                <ColorButton className="button button__long" onClick={startLiveRecord}>
-                    Live record
-                </ColorButton>
-                <ColorButton className="button button__long" onClick={handleRecordClick}>
-                    {isRecording ? "стоп" : "старт"}
-                </ColorButton>
+                <div className="containerButtons" onClick={startLiveRecord}>
+                    <ColorButton variant={'outlined'} onClick={startLiveRecord}>
+                        Live record
+                    </ColorButton>
+                    <ColorButton variant={'outlined'} onClick={handleRecordClick}>
+                        {isRecording ? "Stop" : "Start"}
+                    </ColorButton>
+                </div>
+                <div className="containerResults" onClick={startLiveRecord}>
+                    <ColorTextHeader>Result</ColorTextHeader>
+                    <div className='textContainer'>
+                        <ColorText>Gender: </ColorText>
+                        <ColorText>{data?.gender}</ColorText>
+                    </div>
+                    <div className='textContainer'>
+                        <ColorText>Emotion: </ColorText>
+                        <ColorText>{data?.emotion}</ColorText>
+                    </div>
+                </div>
+                <div className="containerExamples" onClick={startLiveRecord}>
+                    <div className='sampleContainer'>
+                        <div className='sampleTextContainer'>
+                            <ColorTextSample>Angry</ColorTextSample>
+                            <div style={{width: 10}}/>
+                            <ColorTextSample>Male</ColorTextSample>
+                        </div>
+                        <div className='sampleTextContainer'>
+                            <Play/>
+                            <div style={{width: 10}}/>
+                            <Recognise/>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div className="result">
-                {/*{isFetching && <CircularProgress/>}*/}
-                {isFetched/* && !isFetching */&& (
-                    <Fragment>
-                        <Typography variant='h4'>Результат обработки вашего голоса</Typography>
-                        <Typography variant='h6'>Эмоция: {data.emotion}</Typography>
-                        <Typography variant='h6'>Гендер: {data.gender}</Typography>
-                        <h2 className="home-page_title">
-                            Хотите узнать, как это работает?
-                        </h2>
-                        <Link to='/info'>
-                            <ColorButton className="button button__long">
-                                Узнать
-                            </ColorButton>
-                        </Link>
-                    </Fragment>
-                )}
-            </div>
-            {data.error && <div>Произошла ошибка, возможно вы записали тишину или слишком длинный фрагмент</div>}
+            {/*{data.error && <div>Произошла ошибка, возможно вы записали тишину или слишком длинный фрагмент</div>}*/}
+            <svg className="waves" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                          d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/>
+                </defs>
+                <g className="parallax">
+                    <use className='wave' xlinkHref="#gentle-wave" x="48" y="0" opacity={0.7} fill={colorWave}/>
+                    <use className='wave' xlinkHref="#gentle-wave" x="48" y="3" opacity={0.5} fill={colorWave}/>
+                    <use className='wave' xlinkHref="#gentle-wave" x="48" y="5" opacity={0.3} fill={colorWave}/>
+                    <use className='wave' xlinkHref="#gentle-wave" x="48" y="7" fill={colorWave}/>
+                </g>
+            </svg>
+            <div className='coloredEndWave' style={{background: colorWave}}/>
         </div>
     )
 }
