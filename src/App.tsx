@@ -15,11 +15,11 @@ function App() {
         <div className="wrapper">
             <header>
                 <h1>Speech Emotion Recognition</h1>
-                <p>Приложение, созданное с помощью нейронной сети, распознает ваши эмоции</p>
+                <p>Application, made upon neural network, will recognize your emotions</p>
             </header>
             <Router>
                 <Switch>
-                    <Route exact path='/record'>
+                    <Route exact path='/'>
                         <Record />
                     </Route>
                     {/*<Route exact path='/'>*/}

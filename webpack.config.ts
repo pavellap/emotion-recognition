@@ -37,14 +37,14 @@ const config = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:4].css',
     }),
-    new CopyPlugin({
+    /*new CopyPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, 'public', 'static'),
           to: path.resolve(__dirname, 'build', 'static')
         },
       ]
-    }),
+    }),*/
   ],
   devServer: {
     static: {
@@ -87,6 +87,10 @@ const config = {
         test: /\.s?css$/,
         exclude: /\.module\.(s?css|sass)$/,
         use: cssRule(false),
+      },
+      {
+        test: /\.wav$/,
+        loader: 'file-loader'
       },
       {
         test: /.(jpg|jpeg|gif|png|ico|svg|pdf|webp)$/,
