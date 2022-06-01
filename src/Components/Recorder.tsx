@@ -142,13 +142,18 @@ const Record: React.FC = () => {
     const refs = React.useRef<HTMLAudioElement[]>([]);
 
 
-    const startRecord = React.useCallback(async (recorder: Recorder) => {
+    const startRecord = React.useCallback(async (recorder: Recorder, isLive: boolean = false) => {
         try {
             if (!recorder) {
                 console.log('no recorder start')
                 return;
             }
-            setRecording(true);
+            if (isLive) {
+                setLiveRecording(true);
+            }
+            else {
+                setRecording(true);
+            }
             await recorder.start();
         } catch (e) {
             console.log('caught error on start record: ', e);
@@ -171,13 +176,18 @@ const Record: React.FC = () => {
         }
     }, [])
 
-    const stopRecord = React.useCallback(async (recorder: Recorder): Promise<Blob> => {
+    const stopRecord = React.useCallback(async (recorder: Recorder, isLive: boolean = false): Promise<Blob> => {
         try {
             if (!recorder) {
                 console.log('no recorder stop')
                 return;
             }
-            setRecording(false);
+            if (isLive) {
+                setLiveRecording(false);
+            }
+            else {
+                setRecording(false);
+            }
             const {blob} = await recorder.stop();
             return blob;
         } catch (e) {
@@ -202,22 +212,23 @@ const Record: React.FC = () => {
 
     const startLiveRecord = React.useCallback(() => {
         console.log('start')
-        if (isRecording) {
+        if (isLiveRecording) {
             console.log('clearing');
             clearInterval(interval)
         } else {
             startIntervalRecord();
         }
-    }, [isRecording, interval])
+    }, [interval, isLiveRecording])
 
     const startIntervalRecord = React.useCallback(async (): Promise<void> => {
+        // todo: убрать delay при старте записи
         setIntervalInstance(setInterval(async () => {
             const recorder = new Recorder(new AudioContext());
             const stream = await navigator.mediaDevices.getUserMedia({audio: true});
             await recorder.init(stream);
-            await startRecord(recorder);
+            await startRecord(recorder, true);
             await wait(RECORD_BASE_INTERVAL);
-            const blob = await stopRecord(recorder);
+            const blob = await stopRecord(recorder, true);
             await uploadAudio(blob);
         }, RECORD_BASE_INTERVAL + 100))
     }, [])
@@ -235,7 +246,7 @@ const Record: React.FC = () => {
             <div className="container">
                 <div className="containerButtons" onClick={startLiveRecord}>
                     <ColorButton variant={'outlined'} onClick={startLiveRecord}>
-                        Live record
+                        {isLiveRecording ? 'Stop' : 'Live record'}
                     </ColorButton>
                     <ColorButton variant={'outlined'} onClick={handleRecordClick}>
                         {isRecording ? "Stop" : "Start"}
